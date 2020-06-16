@@ -1,10 +1,3 @@
-# 第三方扩展库，一般都是引用app
-
-
-def init_ext(app):
-    pass
-
-
 # 配置数据库url信息，返回一个连接格式
 def get_db_url(dbinfo):
 
@@ -26,7 +19,7 @@ class Config():
 
 
 # 开发环境，可以通过这样的方式来配置多个环境
-class DevelopConfing():
+class DevelopConfing(Config):
     DEBUG = True
 
     dbinfo = {
@@ -43,7 +36,7 @@ class DevelopConfing():
 
 
 # 测试环境
-class TestConfing():
+class TestConfing(Config):
     DEBUG = True
 
     dbinfo = {
@@ -51,10 +44,10 @@ class TestConfing():
         "ENGING": "mysql",
         "DRIVER": "pymysql",
         "USER": "root",
-        "PWD": "HFS123456",
-        "HOST": "localhost",
+        "PWD": "123456",
+        "HOST": "139.9.179.188",
         "PORT": "3306",
-        "NAME": "GPI"
+        "NAME": "Test"
     }
     SQLALCHEMY_DATABASE_URL = get_db_url(dbinfo)
 
@@ -64,3 +57,15 @@ envs = {
     "developConfing": "DevelopConfing",
     "testConfing": "TestConfing"
 }
+
+#print(envs.get("testConfing"))
+
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
+
+if __name__ == '__main__':
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = TestConfing.SQLALCHEMY_DATABASE_URL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db = SQLAlchemy(app)
+    db.create_all()
