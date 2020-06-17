@@ -1,4 +1,5 @@
-from flask import Blueprint, redirect, url_for, render_template, make_response
+from flask import Blueprint, redirect, url_for, render_template, make_response, Response, abort
+
 from App.models import mdb, User
 
 
@@ -68,16 +69,30 @@ def get_any(tom):
 @blue.route('/redirect/')
 def getredirect():
     # url_for 第一个参数传的是蓝图的名称，也就是上面蓝图定义的传的
-    #return redirect('/home')
-    return redirect(url_for('index.index'))
+    #return redirect('/home') #重定向
+
+    """
+    反向解析，传路由的节点
+    index.index:第一个是index是蓝图的名称，也就是上面蓝图定义的传的，第二个是路由的方法名
+    :return:
+    """
+    return redirect(url_for('index.index')) #
 
 
 @blue.route('/getresponst/',methods = ['get'])
 def get_response():
 
-    #response = make_response("<h2>cscscs</h2>")
-    #return response
-    return render_template('index.html')
+    #response = make_response("<h2>cscscs</h2>")#  make_response
+    abort(404)#  终止执行,下面的都不执行啦
+    response = Response("构建一个我自己")#  直接构建response
+    return response
+    #return render_template('index.html')#  通过模板解析，直接返回response
 
 
+#  捕获异常,路由里头404的异常
+@blue.errorhandler(404)
+def handler_error(error):
+    print(error)
+    print(type(error))
 
+    return 'what'

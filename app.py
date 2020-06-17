@@ -1,3 +1,4 @@
+"""
 from flask_script import Manager
 from flask import Flask, render_template, request, redirect, url_for
 
@@ -32,8 +33,9 @@ def home():
 @app.route('/index/')
 def index():
     return render_template('index.html')
-
+"""
 if __name__ == '__main__':
-
+    pass
     # app.run(debug = True)
-    manage.run(debug = True)
+    #manage.run(debug = True)
+
